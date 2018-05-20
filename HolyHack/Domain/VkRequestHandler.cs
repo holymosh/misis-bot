@@ -57,8 +57,27 @@ namespace Domain
         {
             var command = callbackRequest.Object.Body;
             var toExecute = _commands.SingleOrDefault(pair => pair.Key.Equals(command.Trim().ToLower())).Value;
-            toExecute(callbackRequest);
+            if (toExecute == null)
+            {
+                SendCommandList(callbackRequest);
+            }
+            else
+            {
+                toExecute(callbackRequest);
+            }
             return "ok";
+        }
+
+        private void SendCommandList(CallbackRequest callbackRequest)
+        {
+            var buildedClient = GetInitializeWebClient(callbackRequest);
+            var message = "Список команд : \n" +
+                          "2) объединения - получить список студенческих объединений университета \n" +
+                          "4) карта - карта корпусов \n"
+                          ;
+            buildedClient.QueryString.Add("message",message);
+            var res = buildedClient.DownloadString(uri);
+
         }
 
         private string Confirm(CallbackRequest callbackRequest)
