@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HolyHack", "HolyHack\HolyHack.csproj", "{C506B06F-BA46-4F6D-A9B6-3C0464EF561D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{415BE3EE-C568-4E2A-8849-3D73F70FD79D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C506B06F-BA46-4F6D-A9B6-3C0464EF561D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C506B06F-BA46-4F6D-A9B6-3C0464EF561D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C506B06F-BA46-4F6D-A9B6-3C0464EF561D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C506B06F-BA46-4F6D-A9B6-3C0464EF561D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{415BE3EE-C568-4E2A-8849-3D73F70FD79D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{415BE3EE-C568-4E2A-8849-3D73F70FD79D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{415BE3EE-C568-4E2A-8849-3D73F70FD79D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{415BE3EE-C568-4E2A-8849-3D73F70FD79D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F301E9A2-2F61-4531-A056-93F9EE2FF81E}
+	EndGlobalSection
+EndGlobal
