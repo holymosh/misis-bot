@@ -14,7 +14,7 @@ namespace Domain
     {
         public string ConfirmationToken { get; set; }
         public string Secret { get; set; }
-
+        private readonly IVkProxy _vkProxy;
         public string AccessToken =
             "0b14f43ca3fb677819bcf0e590a6d5e03ece904638235f3a45c90036267667f1fe0ed0e43942c11a9f05c";
 
@@ -22,18 +22,37 @@ namespace Domain
         private readonly IDictionary<string, Action<CallbackRequest>> _commands;
         private readonly Uri uri = new Uri(@"https://api.vk.com/method/messages.send");
 
-        public VkCallbackApiHandler()
+        public VkCallbackApiHandler(IVkProxy vkProxy)
         {
+            _vkProxy = vkProxy;
             _methods = new Dictionary<EventType, Func<CallbackRequest, string>>()
             {
                 {EventType.Сonfirmation, Confirm},
-                {EventType.MessageNew, SendMessage}
+                {EventType.MessageNew, SendMessage},
+                
             };
             _commands = new Dictionary<string, Action<CallbackRequest>>()
             {
                 {"объединения", SendCommunityList },
-                {"карта", SendBuildingsMap }
+                {"карта", SendBuildingsMap },
+                {"расписание", SendSchedule },
+                {"tag", SendPostsFromMisisGroup }
             };
+        }
+
+        private void SendPostsFromMisisGroup(CallbackRequest callbackRequest)
+        {
+            if (_vkProxy.AccessToken.Equals(String.Empty))
+            {
+                _vkProxy.GetPosts(GetInitializeWebClient(callbackRequest) , uri , callbackRequest.Object.Body);
+            }
+        }
+
+        private void SendSchedule(CallbackRequest callbackRequest)
+        {
+            var buildedClient = GetInitializeWebClient(callbackRequest);
+            buildedClient.QueryString.Add("attachment" , "doc141213476_466619620,doc141213476_466619622,doc141213476_466619680,doc141213476_466619682,doc141213476_466619754,doc141213476_466619783");
+            var res = buildedClient.DownloadString(uri);
         }
 
         private void SendBuildingsMap(CallbackRequest callbackrequest)
@@ -48,11 +67,11 @@ namespace Domain
         {
             var buildedClient = GetInitializeWebClient(callbackRequest);
             var message = "Список объединений : \n" +
+                          "Лига разработчиков МИСиС - https://vk.com/lodmisis \n" +
                           "НИТУ «МИСиС» - https://vk.com/nust_misis \n" +
                           "ТурКлуб МИСиС - https://vk.com/tk_misis \n" +
                           "Студенческий совет НИТУ «МИСиС» - https://vk.com/studentmisis \n" +
                           "Студсовет Общежитий НИТУ \"МИСиС\" - https://vk.com/studac_new \n" +
-                          "ППО студентов МИСиС - https://vk.com/profkom_misis \n" +
                           "Центр карьеры НИТУ \"МИСиС\" - https://vk.com/ck_misis \n " +
                           "Цитатник МИСиС - https://vk.com/public80799683 \n" +
                           "СКБ НИТУ \"МИСиС\" - https://vk.com/skbmisis \n" +
@@ -66,8 +85,8 @@ namespace Domain
                           "Киберспорт НИТУ \"МИСиС\" - https://vk.com/cybersport_nustmisis \n" +
                           "Волонтерский центр НИТУ \"МИСиС\" - https://vk.com/volunteer_misis \n" +
                           "Хоккейный клуб НИТУ \"МИСиС\" \"Стальные медведи\" - https://vk.com/fan.steelbears \n" +
-                          "Преактум НИТУ \"МИСиС\" - https://vk.com/club130991442 \n" +
-                          "Кейс-движение CUP MISIS CASE - https://vk.com/cupmisiscase"
+                          "Кейс-движение CUP MISIS CASE - https://vk.com/cupmisiscase \n " +
+                          "Сделано Лигой Разработчиков - https://lod-misis.ru"
 
                 ;
                           
@@ -81,7 +100,16 @@ namespace Domain
             var toExecute = _commands.SingleOrDefault(pair => pair.Key.Equals(command.Trim().ToLower())).Value;
             if (toExecute == null)
             {
-                SendCommandList(callbackRequest);
+                if (command.Contains("tag"))
+                {
+                    var crutchCommand = _commands.SingleOrDefault(pair => pair.Key.Equals("tag")).Value;
+                    callbackRequest.Object.Body = callbackRequest.Object.Body.Split(' ')[1];
+                    crutchCommand(callbackRequest);
+                }
+                else
+                {
+                    SendCommandList(callbackRequest);
+                }
             }
             else
             {
@@ -94,8 +122,11 @@ namespace Domain
         {
             var buildedClient = GetInitializeWebClient(callbackRequest);
             var message = "Список команд : \n" +
+                          "1)hashtag - получение записи по тегу, например tag студент \n"  +
                           "2) объединения - получить список студенческих объединений университета \n" +
-                          "4) карта - карта корпусов \n"
+                          "3) расписание - расписание занятий \n"+
+                          "4) карта - карта корпусов \n" +
+                          "Сделано Лигой Разработчиков - https://lod-misis.ru/"
                           ;
             buildedClient.QueryString.Add("message",message);
             var res = buildedClient.DownloadString(uri);

@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +20,9 @@ namespace HolyHack
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSingleton<IVkProxy, VkProxy>();
             services.AddSingleton<IVkCallbackApiHandler, VkCallbackApiHandler>();
+            
             services.AddLogging();
         }
 
