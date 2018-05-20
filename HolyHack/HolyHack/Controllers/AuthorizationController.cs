@@ -12,17 +12,14 @@ namespace HolyHack.Controllers
     [Route("oauth")]
     public class AuthorizationController : Controller
     {
-        private readonly IAppAuthorizer _appAuthorizer;
 
-        public AuthorizationController(IAppAuthorizer appAuthorizer)
+        public AuthorizationController()
         {
-            _appAuthorizer = appAuthorizer;
         }
 
         [HttpGet]
         public IActionResult GetCodeForAccessToken([FromBody] string code)
         {
-            _appAuthorizer.SendRequestToGetAccessToken();
             return Ok();
         }
     }
