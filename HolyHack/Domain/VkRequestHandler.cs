@@ -31,24 +31,46 @@ namespace Domain
             };
             _commands = new Dictionary<string, Action<CallbackRequest>>()
             {
-                {"объединения", SendCommunityList }
+                {"объединения", SendCommunityList },
+                {"карта", SendBuildingsMap }
             };
+        }
+
+        private void SendBuildingsMap(CallbackRequest callbackrequest)
+        {
+            var buildedClient = GetInitializeWebClient(callbackrequest);
+            buildedClient.QueryString.Add("attachment" , "photo-166642622_456239017");
+            var res = buildedClient.DownloadString(uri);
+
         }
 
         private void SendCommunityList(CallbackRequest callbackRequest)
         {
             var buildedClient = GetInitializeWebClient(callbackRequest);
             var message = "Список объединений : \n" +
-                          "Студенческий совет НИТУ МИСиС - https://vk.com/studentmisis \n" +
-                          "Центр карьеры - https://vk.com/ck_misis \n" +
-                          "Клуб интернациональной дружбы - https://vk.com/clubinternational \n" +
-                          "Наука - https://vk.com/sno_misis \n" +
-                          "Профком - https://vk.com/profkom_misis \n" +
-                          "Научный медиацентр - https://vk.com/sciencemisis \n" +
-                          "MISiS Media - https://vk.com/misis_media \n" +
-                          "Эндаумент фонд - https://vk.com/ef.misis \n" +
-                          "Спорт клуб - https://vk.com/sportclubmisis \n" +
-                          "Туризм - https://vk.com/tk_misis \n";
+                          "НИТУ «МИСиС» - https://vk.com/nust_misis \n" +
+                          "ТурКлуб МИСиС - https://vk.com/tk_misis \n" +
+                          "Студенческий совет НИТУ «МИСиС» - https://vk.com/studentmisis \n" +
+                          "Студсовет Общежитий НИТУ \"МИСиС\" - https://vk.com/studac_new \n" +
+                          "ППО студентов МИСиС - https://vk.com/profkom_misis \n" +
+                          "Центр карьеры НИТУ \"МИСиС\" - https://vk.com/ck_misis \n " +
+                          "Цитатник МИСиС - https://vk.com/public80799683 \n" +
+                          "СКБ НИТУ \"МИСиС\" - https://vk.com/skbmisis \n" +
+                          "СНО НИТУ «МИСиС» - https://vk.com/sno_misis \n " +
+                          "Lignum | Литературное сообщество НИТУ \"МИСиС\" - https://vk.com/lignummisis \n" +
+                          "КВН МИСиС - https://vk.com/kvn_misis \n" +
+                          "Управление культуры и молодежной политики МИСиС - https://vk.com/ykmp_misis \n" +
+                          "Эндаумент-фонд НИТУ \"МИСиС\" - https://vk.com/ef.misis \n " +
+                          "Лингвистика в МИСиС - https://vk.com/lingvistikavmisis \n" +
+                          "СтудОК НИТУ \"МИСиС\" - https://vk.com/studok_misis \n" +
+                          "Киберспорт НИТУ \"МИСиС\" - https://vk.com/cybersport_nustmisis \n" +
+                          "Волонтерский центр НИТУ \"МИСиС\" - https://vk.com/volunteer_misis \n" +
+                          "Хоккейный клуб НИТУ \"МИСиС\" \"Стальные медведи\" - https://vk.com/fan.steelbears \n" +
+                          "Преактум НИТУ \"МИСиС\" - https://vk.com/club130991442 \n" +
+                          "Кейс-движение CUP MISIS CASE - https://vk.com/cupmisiscase"
+
+                ;
+                          
             buildedClient.QueryString.Add("message", message);
             var res = buildedClient.DownloadString(uri);
         }
